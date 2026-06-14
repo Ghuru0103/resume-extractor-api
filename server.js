@@ -13,6 +13,18 @@ app.get("/", (req, res) => {
 });
 
 app.post("/extract", upload.single("file"), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({
+            success: false,
+            error: "No file uploaded"
+        });
+    }
+    if (req.file.mimetype !== "application/pdf") {
+    return res.status(400).json({
+        success: false,
+        error: "Only PDF files are supported"
+    });
+}
     try {
         const result = await pdf(req.file.buffer);
 
